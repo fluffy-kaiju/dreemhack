@@ -1,0 +1,68 @@
+[gd_scene load_steps=3 format=3 uid="uid://p6pocbx7dn8v"]
+
+[ext_resource type="Script" path="res://ui.gd" id="1_5a6jw"]
+
+[sub_resource type="GDScript" id="GDScript_asp8g"]
+script/source = "extends HTTPRequest
+
+@onready var http_request = %HTTPRequest
+
+# Called when the node enters the scene tree for the first time.
+func _ready():
+	pass # Replace with function body.
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta):
+	pass
+
+
+func _on_ready():
+	pass # Replace with function body.
+"
+
+[node name="UI" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_5a6jw")
+
+[node name="Button" type="Button" parent="."]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -1068.0
+offset_top = -609.0
+offset_right = -985.0
+offset_bottom = -526.0
+grow_horizontal = 0
+grow_vertical = 0
+
+[node name="Test val" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 206.0
+offset_top = 87.0
+offset_right = 553.0
+offset_bottom = 296.0
+
+[node name="Joke" type="Label" parent="."]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 326.0
+offset_top = 251.0
+offset_right = 778.0
+offset_bottom = 498.0
+
+[node name="HTTPRequest" type="HTTPRequest" parent="."]
+unique_name_in_owner = true
+script = SubResource("GDScript_asp8g")
+
+[connection signal="pressed" from="Button" to="." method="_on_button_pressed"]
+[connection signal="ready" from="HTTPRequest" to="." method="_on_http_request_ready"]
