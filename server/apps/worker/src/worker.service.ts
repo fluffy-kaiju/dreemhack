@@ -50,16 +50,14 @@ export class WorkerService {
           ignoreAttributes: false,
           attributeNamePrefix: '',
           parseAttributeValue: true,
-          preserveOrder: true,
-          removeNSPrefix: true,
+          // preserveOrder: true,
+          // removeNSPrefix: true,
         } as X2jOptions;
         if (data.toString().includes('taskprogress')) {
           log(data.toString());
           const test = new XMLParser(options).parse(data);
-          const cleanedData = test.map((item) => ({
-            taskprogress: item.taskprogress,
-            ...item[':@'],
-          }))[0];
+          log(test);
+          const cleanedData = test.taskprogress;
           console.log(cleanedData);
         }
         dataStr += data;
