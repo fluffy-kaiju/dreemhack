@@ -6,7 +6,7 @@ export class WorkerController {
   constructor(private readonly workerService: WorkerService) {}
 
   @Get()
-  getHello(): string {
-    return this.workerService.getHello();
+  async getHello() {
+    return await this.workerService.getHello();
   }
 }
