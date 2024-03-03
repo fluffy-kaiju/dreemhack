@@ -1,0 +1,62 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/typescript-node
+{
+	"name": "Node.js & TypeScript",
+	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
+	// "image": "mcr.microsoft.com/devcontainers/typescript-node:1-20-bullseye",
+	"service": "devcontainer",
+	"dockerComposeFile": "docker-compose-dev.yaml",
+	"workspaceFolder": "/node",
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"GitHub.copilot",
+				"GitHub.copilot-chat",
+				"ashinzekene.nestjs",
+				"vscode-icons-team.vscode-icons",
+				"Gruntfuggly.todo-tree",
+				"YoavBls.pretty-ts-errors",
+				"esbenp.prettier-vscode",
+				"Postman.postman-for-vscode",
+				"cweijan.vscode-postgresql-client2",
+				"christian-kohler.path-intellisense",
+				"christian-kohler.npm-intellisense",
+				"leizongmin.node-module-intellisense",
+				"AbhijoyBasak.nestjs-files",
+				"Orta.vscode-jest",
+				"mhutchie.git-graph",
+				"mikestead.dotenv",
+				"cweijan.dbclient-jdbc",
+				"formulahendry.code-runner",
+				"NuclleaR.vscode-extension-auto-import",
+				"GitHub.vscode-pull-request-github",
+				"dbaeumer.vscode-eslint",
+				"ms-azuretools.vscode-docker",
+				"idered.npm",
+				"mongodb.mongodb-vscode",
+				"github.vscode-github-actions"
+			]
+		}
+	},
+	"features": {
+		"ghcr.io/devcontainers-contrib/features/nestjs-cli:2": {},
+		// "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+	},
+	// "mounts": ["source=/var/run/docker.sock,target=/var/run/docker-host.sock,type=bind"]
+
+
+	// Features to add to the dev container. More info: https://containers.dev/features.
+	// "features": {},
+
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	// "forwardPorts": [],
+
+	// Use 'postCreateCommand' to run commands after the container is created.
+	// "postCreateCommand": "yarn install",
+
+	// Configure tool-specific properties.
+	// "customizations": {},
+
+	// Uncomment to connect as root instead. More info: https://aka.ms/dev-containers-non-root.
+	// "remoteUser": "root"
+}
