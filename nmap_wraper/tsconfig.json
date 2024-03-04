@@ -17,13 +17,6 @@
     "strictBindCallApply": false,
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
-    "paths": {
-      "@nmap_wrapper/*": [
-        "../nmap_wraper/src/*"
-      ],
-      "@nmap_wrapper": [
-        "../nmap_wraper/src"
-      ],
-    }
+    "paths": {}
   }
 }
