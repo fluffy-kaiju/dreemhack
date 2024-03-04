@@ -24,6 +24,12 @@
       "@nmap_wrapper": [
         "../nmap_wraper/src"
       ],
+      "@app/db": [
+        "libs/db/src"
+      ],
+      "@app/db/*": [
+        "libs/db/src/*"
+      ]
     }
   }
 }
