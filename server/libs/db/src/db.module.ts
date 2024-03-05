@@ -1,8 +1,10 @@
 import { Module } from '@nestjs/common';
 import { DbService } from './db.service';
 import { ConfigModule } from '@nestjs/config';
-import { UsersService } from './users/users.service';
+import { UsersDbService } from './users/users.service';
+import { JobsDbService } from './jobs/jobs.db.service';
 import * as Joi from 'joi';
+import { UsersModelService } from './users/users.model.service';
 
 @Module({
   imports: [
@@ -30,7 +32,7 @@ import * as Joi from 'joi';
     // }),
     // TypeOrmModule.forFeature([]),
   ],
-  providers: [DbService, UsersService],
-  exports: [ConfigModule, DbService, UsersService],
+  providers: [DbService, UsersDbService, JobsDbService, UsersModelService],
+  exports: [UsersModelService],
 })
 export class DbModule {}

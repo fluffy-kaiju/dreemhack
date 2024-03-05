@@ -13,7 +13,26 @@ datasource db {
   url      = env("POSTGRES_URL")
 }
 
+
+enum EJobStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  FAILED
+}
+
+
 model User {
   id       String   @id @default(uuid())
   name     String?
+  jobs     Job[]
+}
+
+model Job {
+  id          String   @id @default(uuid())
+  name        String
+  description String
+  status      EJobStatus
+  user        User     @relation(fields: [userId], references: [id])
+  userId      String
 }
