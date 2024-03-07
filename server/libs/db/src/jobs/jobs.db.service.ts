@@ -4,7 +4,7 @@ import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class JobsDbService {
-  constructor(private readonly dbService: DbService) {}
+  constructor(private dbService: DbService) {}
 
   async create(data: Prisma.JobCreateInput) {
     return this.dbService.job.create({ data });
@@ -12,6 +12,10 @@ export class JobsDbService {
 
   async findAll() {
     return this.dbService.job.findMany();
+  }
+
+  async findOne(id: string) {
+    return this.dbService.job.findUnique({ where: { id } });
   }
 
   async update(id: string, data: Prisma.JobUpdateInput) {

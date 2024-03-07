@@ -109,7 +109,20 @@ export class Nmap {
         if (code !== 0) {
           reject(`child process exited with code ${code}`);
         }
-        resolve(dataStr);
+        try {
+          const options = {
+          ignoreAttributes: false,
+          attributeNamePrefix: '',
+          parseAttributeValue: true,
+          // preserveOrder: true,
+          // removeNSPrefix: true,
+          } as X2jOptions;
+
+            const test = new XMLParser(options).parse(dataStr);
+            resolve(test);
+        } catch (error) {
+          throw new Error('Error parsing nmap output');
+        }
       });
     })
     .catch((err) => {

@@ -3,10 +3,14 @@ import { CreateJobDto } from './dto/create-job.dto';
 import { UpdateJobDto } from './dto/update-job.dto';
 import { UsersModelService } from '@app/db/users/users.model.service';
 import { $Enums } from '@prisma/client';
+import { JobsModelService } from '@app/db/jobs/jobs.model.service';
 
 @Injectable()
 export class JobsService {
-  constructor(private readonly usersModel: UsersModelService) {}
+  constructor(
+    private readonly usersModel: UsersModelService,
+    private readonly jobsModel: JobsModelService,
+  ) {}
 
   async create(createJobDto: CreateJobDto) {
     //WIP: run
@@ -21,11 +25,11 @@ export class JobsService {
   }
 
   findAll() {
-    return `This action returns all jobs`;
+    return this.jobsModel.findAll();
   }
 
   findOne(id: number) {
-    return `This action returns a #${id} job`;
+    return this.jobsModel.findOne(id);
   }
 
   update(id: number, updateJobDto: UpdateJobDto) {

@@ -5,6 +5,7 @@ import { UsersDbService } from './users/users.service';
 import { JobsDbService } from './jobs/jobs.db.service';
 import * as Joi from 'joi';
 import { UsersModelService } from './users/users.model.service';
+import { JobsModelService } from './jobs/jobs.model.service';
 
 @Module({
   imports: [
@@ -32,7 +33,13 @@ import { UsersModelService } from './users/users.model.service';
     // }),
     // TypeOrmModule.forFeature([]),
   ],
-  providers: [DbService, UsersDbService, JobsDbService, UsersModelService],
-  exports: [UsersModelService],
+  providers: [
+    DbService,
+    UsersDbService,
+    UsersModelService,
+    JobsDbService,
+    JobsModelService,
+  ],
+  exports: [UsersModelService, JobsModelService],
 })
 export class DbModule {}

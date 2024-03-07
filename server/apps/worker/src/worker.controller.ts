@@ -13,7 +13,7 @@ export class WorkerController {
   @Post('/raw')
   async rawArg(@Body() args: RawNmapArgsDto) {
     // generate a id and store in db
-    this.workerService.runRawArgs(args.params).catch((err) => {
+    return await this.workerService.runRawArgs(args.params).catch((err) => {
       this.log.error(err);
     });
     return 'ok';
