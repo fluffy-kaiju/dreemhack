@@ -1,4 +1,8 @@
-import { WebSocketGateway, SubscribeMessage, MessageBody } from '@nestjs/websockets';
+import {
+  WebSocketGateway,
+  SubscribeMessage,
+  MessageBody,
+} from '@nestjs/websockets';
 import { OrchestraService } from './orchestra.service';
 import { CreateOrchestraDto } from './dto/create-orchestra.dto';
 import { UpdateOrchestraDto } from './dto/update-orchestra.dto';
@@ -24,7 +28,10 @@ export class OrchestraGateway {
 
   @SubscribeMessage('updateOrchestra')
   update(@MessageBody() updateOrchestraDto: UpdateOrchestraDto) {
-    return this.orchestraService.update(updateOrchestraDto.id, updateOrchestraDto);
+    return this.orchestraService.update(
+      updateOrchestraDto.id,
+      updateOrchestraDto,
+    );
   }
 
   @SubscribeMessage('removeOrchestra')
