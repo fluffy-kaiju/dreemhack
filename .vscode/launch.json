@@ -26,7 +26,34 @@
       "sourceMaps": true,
       "cwd": "${workspaceRoot}/server",
       "console": "integratedTerminal",
-    }
+    },
+    {
+      "name": "Server",
+      "type": "node",
+      "request": "launch",
+      "args": ["${workspaceFolder}/apps/server/src/main.ts"],
+		// "runtimeExecutable": "infisical",
+		"runtimeExecutable": "npm",
+      "runtimeArgs": [
+
+		// "run",
+		// "--env=dev",
+		// "--",
+		// "npm",
+		"run",
+		"start:debug",
+    "server",
+        // "--nolazy",
+        // "-r",
+        // "ts-node/register",
+        // "-r",
+        // "tsconfig-paths/register"
+      ],
+      "sourceMaps": true,
+      "cwd": "${workspaceRoot}/server",
+      "console": "integratedTerminal",
+    },
+
   ]
 }
 
