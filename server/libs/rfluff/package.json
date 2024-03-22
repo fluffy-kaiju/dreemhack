@@ -1,0 +1,11 @@
+{
+  "name": "rfluff",
+  "version": "1.0.0",
+  "description": "A TS lib to execute and interact with bin",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

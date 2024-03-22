@@ -1,5 +1,5 @@
 import { BadGatewayException, Injectable, Logger } from '@nestjs/common';
-import { Nmap } from '@nmap_wrapper';
+import { Nmap } from 'libs/nmap_wraper/src';
 
 @Injectable()
 export class WorkerService {
@@ -16,6 +16,7 @@ export class WorkerService {
         // emit to master
       })
       .catch((err) => {
+        this.log.error(err);
         throw new BadGatewayException(err?.message || 'Error running nmap');
       });
   }

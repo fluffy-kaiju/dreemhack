@@ -1,4 +1,12 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { NmapService } from './nmap.service';
 import { CreateNmapDto } from './dto/create-nmap.dto';
 import { UpdateNmapDto } from './dto/update-nmap.dto';

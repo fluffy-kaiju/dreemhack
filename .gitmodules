@@ -1,0 +1,3 @@
+[submodule "server/libs/OneForAll"]
+	path = server/libs/OneForAll
+	url = git@github.com:Matthew-Dreemurr/OneForAll.git

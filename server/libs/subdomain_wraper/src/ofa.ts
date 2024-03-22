@@ -1,7 +1,5 @@
 import { X2jOptions, XMLParser } from 'fast-xml-parser';
 import { ChildProcessWithoutNullStreams, spawn } from 'node:child_process';
-import { log } from 'node:console';
-import { UUID, privateDecrypt } from 'node:crypto';
 
 export interface INmapTaskProgress {
   task: string;
@@ -11,9 +9,9 @@ export interface INmapTaskProgress {
   etc: number;
 }
 
-export class Nmap {
+export class Ofa {
   constructor() {
-    console.log('Nmap');
+    console.log('Ofa');
   }
 
   private child: ChildProcessWithoutNullStreams;
@@ -54,9 +52,12 @@ export class Nmap {
     return null;
   }
 
-  async run_param(params: string[], statsCallback: (taskProgress: INmapTaskProgress) => void, statsEvery: `${number}s`= `1s`) {
+  async run_param(
+    params: string[],
+    statsCallback: (taskProgress: INmapTaskProgress) => void,
+    // statsEvery: `${number}s` = `1s`,
+  ) {
     return new Promise((resolve, reject) => {
-
       if (params.includes('--stats-every')) {
         reject('Cannot use --stats-every');
       }
@@ -65,31 +66,26 @@ export class Nmap {
         reject('Cannot use -oX');
       }
 
-      this.child = spawn(
-        'nmap',
-        [
-          '--stats-every',
-          '1s',
-          '-oX',
-          '-',
-          ...params,
-        ],
-      );
+      //   this.child = spawn('nmap', [
+      //     '--stats-every',
+      //     statsEvery,
+      //     '-oX',
+      //     '-',
+      //     ...params,
+      //   ]);
 
-
-      let dataStr = '';
+      //   let dataStr = '';
 
       this.child.stdout.on('data', (out: string) => {
-
         try {
-          // console.log(out.toString());
-          const progess = this.parseTaskProgress(out.toString());
-          if (progess) {
-            statsCallback(progess);
-          }
-          dataStr += out;
+          console.log(out.toString());
+          //   const progess = this.parseTaskProgress(out.toString());
+          //   if (progess) {
+          //     statsCallback(progess);
+          //   }
+          //   dataStr += out;
         } catch (error) {
-          reject('Error parsing nmap output')
+          reject('Error parsing nmap output');
         }
       });
 
@@ -111,22 +107,21 @@ export class Nmap {
         }
         try {
           const options = {
-          ignoreAttributes: false,
-          attributeNamePrefix: '',
-          parseAttributeValue: true,
-          // preserveOrder: true,
-          // removeNSPrefix: true,
+            ignoreAttributes: false,
+            attributeNamePrefix: '',
+            parseAttributeValue: true,
+            // preserveOrder: true,
+            // removeNSPrefix: true,
           } as X2jOptions;
 
-            const test = new XMLParser(options).parse(dataStr);
-            resolve(test);
+          const test = new XMLParser(options).parse(dataStr);
+          resolve(test);
         } catch (error) {
           throw new Error('Error parsing nmap output');
         }
       });
-    })
-    .catch((err) => {
+    }).catch((err) => {
       this.err(err);
-    })
+    });
   }
 }

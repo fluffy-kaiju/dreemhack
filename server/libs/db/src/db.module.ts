@@ -6,6 +6,8 @@ import { JobsDbService } from './jobs/jobs.db.service';
 import * as Joi from 'joi';
 import { UsersModelService } from './users/users.model.service';
 import { JobsModelService } from './jobs/jobs.model.service';
+import { WorkerDbService } from './worker/worker.db.service';
+import { WorkerModelService } from './worker/worker.model.service';
 
 @Module({
   imports: [
@@ -39,7 +41,9 @@ import { JobsModelService } from './jobs/jobs.model.service';
     UsersModelService,
     JobsDbService,
     JobsModelService,
+    WorkerDbService,
+    WorkerModelService,
   ],
-  exports: [UsersModelService, JobsModelService],
+  exports: [UsersModelService, JobsModelService, WorkerModelService],
 })
 export class DbModule {}

@@ -32,10 +32,19 @@ model Job {
   id          String   @id @default(uuid())
   name        String
   description String
-  lol		 String @default("lol")
   status      EJobStatus
   user        User     @relation(fields: [userId], references: [id])
   userId      String
 }
 
+enum EWorkerStatus {
+	ONLINE
+	OFFLINE
+	WORKING
+}
 
+model Worker {
+  id       String   @id @default(uuid())
+  name     String?
+  status   EWorkerStatus
+}

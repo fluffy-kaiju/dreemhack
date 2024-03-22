@@ -1,0 +1,14 @@
+{
+  "name": "subdomain_wraper",
+  "version": "1.0.0",
+  "description": "A typescript OneForAll subdomain finder wraper",
+  "main": "index.ts",
+  "include": [
+	"src/**/*.ts"
+  ],
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}

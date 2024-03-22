@@ -18,12 +18,8 @@
     "forceConsistentCasingInFileNames": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
-      "@nmap_wrapper/*": ["libs/nmap_wraper/src/*"],
-      "@nmap_wrapper": ["libs/nmap_wraper/src"],
-      "@app/db": ["libs/db/src"],
-      "@app/db/*": ["libs/db/src/*"],
-      "@rfluff": ["libs/rfluff/src"],
-      "@rfluff/*": ["libs/rfluff/src/*"]
+      "@rfluff": ["../rfluff/src"],
+      "@rfluff/*": ["../rfluff/src/*"]
     }
   }
 }
