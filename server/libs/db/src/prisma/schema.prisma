@@ -34,6 +34,16 @@ enum EJobType {
 	SUBDOMAIN_SCAN
 }
 
+//TODO rework all db and relations
+// https://youtu.be/4q-keGvUnag
+model scope {
+  id       String   @id @default(uuid())
+  name     String
+  description String
+
+  jobs     Job[]
+}
+
 model Job {
   id          String   @id @default(uuid())
   name        String
@@ -53,15 +63,35 @@ model Job {
   userId      String
 
   subdomains  Subdomain[]
-  IPs  IP[]
-  Ports  Port[]
+  ips  IP[]
+  ports  Port[]
+  domains  Domain[]
+
+  scope       scope @relation(fields: [scopeId], references: [id])
+  scopeId     String
+}
+
+model Domain {
+  id       String   @id @default(uuid())
+  name     String
+
+  subdomains  Subdomain[]
+
+  job       Job @relation(fields: [jobId], references: [id])
+  jobId     String @unique
 }
 
 model Subdomain {
   id       String   @id @default(uuid())
   name     String
 
-  subdomainIP  IP[]
+  ip IP? @relation(fields: [ipId], references: [id])
+  ipId     String @unique
+
+  domain  Domain @relation(fields: [domainId], references: [id])
+  domainId     String
+
+  port  Port[]
 
   job       Job @relation(fields: [jobId], references: [id])
   jobId     String
@@ -73,6 +103,7 @@ model IP {
   ipv6       String?
 
   subdomain  Subdomain[]
+
   ports  Port[]
 
   job       Job @relation(fields: [jobId], references: [id])
@@ -85,6 +116,10 @@ model Port {
 
   ip       IP @relation(fields: [ipId], references: [id])
   ipId     String
+
+  subdomain  Subdomain @relation(fields: [subdomainId], references: [id])
+  subdomainId     String
+
 
   job       Job @relation(fields: [jobId], references: [id])
   jobId     String
