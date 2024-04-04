@@ -1,127 +1,79 @@
-import { X2jOptions, XMLParser } from 'fast-xml-parser';
-import { ChildProcessWithoutNullStreams, spawn } from 'node:child_process';
+import { Rfluff } from '@rfluff';
+import * as fs from 'fs/promises';
+import * as path from 'path';
 
-export interface INmapTaskProgress {
-  task: string;
-  time: number;
-  percent: number;
-  remaining: number;
-  etc: number;
+export interface IOneForAllTaskProgress {
+  log: string;
 }
 
 export class Ofa {
   constructor() {
-    console.log('Ofa');
+    console.log('OneForAll');
   }
 
-  private child: ChildProcessWithoutNullStreams;
-  private pid: number;
+  private child_scan: Rfluff;
 
-  private err(data: string) {
-    if (this.child.exitCode === null) {
-      const code = this.child.kill();
-      if (code === false) {
-        throw new Error(`Error killing nmap process ${this.child?.pid}`);
-      }
-    }
-    throw new Error(data);
-  }
-
-  private parseTaskProgress(data: string) {
-    const options = {
-      ignoreAttributes: false,
-      attributeNamePrefix: '',
-      parseAttributeValue: true,
-      // preserveOrder: true,
-      // removeNSPrefix: true,
-    } as X2jOptions;
-    if (data.toString().includes('taskprogress')) {
-      const test = new XMLParser(options).parse(data);
-      const cleanedData = test.taskprogress;
-      if (cleanedData) {
-        const taskProgress: INmapTaskProgress = {
-          task: cleanedData.task,
-          time: cleanedData.time,
-          percent: cleanedData.percent,
-          remaining: cleanedData.remaining,
-          etc: cleanedData.etc,
-        };
-        return taskProgress;
-      }
-    }
-    return null;
-  }
+  //TODO Refactor way to get the 'OneForAll' output and remove the security vulnerability
 
   async run_param(
-    params: string[],
-    statsCallback: (taskProgress: INmapTaskProgress) => void,
-    // statsEvery: `${number}s` = `1s`,
+    target: string,
+    jobId: string,
+    statsCallback: (taskProgress: IOneForAllTaskProgress) => void,
   ) {
-    return new Promise((resolve, reject) => {
-      if (params.includes('--stats-every')) {
-        reject('Cannot use --stats-every');
+    if (!target) {
+      throw new Error('Target is required');
+    }
+
+    if (!jobId) {
+      throw new Error('JobId is required');
+    }
+
+    /**
+     * WARNING!! There is a security vulnerability in the following code.
+     * The code could be vulnerable to Path Traversal attack.
+     * The variable `jobId` is used to construct the path to the temporary file.
+     * An attacker could manipulate the `jobId` to write the file to any location on the filesystem.
+     * The code should be refactored to use a secure method to construct the path to the temporary file.
+     * Or find a other way to get the 'OneForAll' output.
+     */
+    const tmpExportFile = path.join('/tmp/', `${jobId}_export.json`);
+
+    this.child_scan = new Rfluff();
+
+    // This is the function that will be called each time the stdout of the child process is written
+    this.child_scan.setStdoutCallback((data: string) => {
+      try {
+        if (data) {
+          statsCallback({ log: data });
+        }
+      } catch (error) {
+        throw new Error('Error parsing OneForAll output');
       }
-
-      if (params.includes('-oX')) {
-        reject('Cannot use -oX');
-      }
-
-      //   this.child = spawn('nmap', [
-      //     '--stats-every',
-      //     statsEvery,
-      //     '-oX',
-      //     '-',
-      //     ...params,
-      //   ]);
-
-      //   let dataStr = '';
-
-      this.child.stdout.on('data', (out: string) => {
-        try {
-          console.log(out.toString());
-          //   const progess = this.parseTaskProgress(out.toString());
-          //   if (progess) {
-          //     statsCallback(progess);
-          //   }
-          //   dataStr += out;
-        } catch (error) {
-          reject('Error parsing nmap output');
-        }
-      });
-
-      this.child.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-        reject(data?.toString() || 'Unknown error');
-      });
-
-      this.child.on('error', (err: string) => {
-        console.log(`err ${err}`);
-
-        reject(err);
-      });
-
-      this.child.on('close', (code: number) => {
-        console.log(`child process exited with code ${code}`);
-        if (code !== 0) {
-          reject(`child process exited with code ${code}`);
-        }
-        try {
-          const options = {
-            ignoreAttributes: false,
-            attributeNamePrefix: '',
-            parseAttributeValue: true,
-            // preserveOrder: true,
-            // removeNSPrefix: true,
-          } as X2jOptions;
-
-          const test = new XMLParser(options).parse(dataStr);
-          resolve(test);
-        } catch (error) {
-          throw new Error('Error parsing nmap output');
-        }
-      });
-    }).catch((err) => {
-      this.err(err);
     });
+
+    // This is the function that will be called each time the stderr of the child process is written
+    this.child_scan.setStderrCallback((data: string) => {
+      console.error(`[${jobId}] stderr: ${data}`);
+    });
+
+    // python3 oneforall.py --target dreemcloud.net run --path /dev/null
+    await this.child_scan.run_param('python3', [
+      'libs/OneForAll/oneforall.py',
+      '--target',
+      target,
+      '--fmt',
+      'json',
+      '--path',
+      tmpExportFile,
+      'run',
+    ]);
+
+    try {
+      const data = await fs.readFile(tmpExportFile, 'utf8');
+      fs.rm(tmpExportFile);
+      return data;
+    } catch (error) {
+      throw new Error(`Error reading OneForAll output: ${error}`);
+    }
   }
 }

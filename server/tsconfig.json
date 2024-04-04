@@ -20,6 +20,8 @@
     "paths": {
       "@nmap_wrapper/*": ["libs/nmap_wraper/src/*"],
       "@nmap_wrapper": ["libs/nmap_wraper/src"],
+      "@onefoall_wrapper/*": ["libs/subdomain_wraper/src/*"],
+      "@onefoall_wrapper": ["libs/subdomain_wraper/src"],
       "@app/db": ["libs/db/src"],
       "@app/db/*": ["libs/db/src/*"],
       "@rfluff": ["libs/rfluff/src"],

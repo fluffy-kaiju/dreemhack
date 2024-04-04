@@ -9,6 +9,15 @@ export interface IRfluffResult {
 export class Rfluff {
   constructor() {
     console.log('Rfluff');
+    console.log(`cwd: ${process.cwd()}`);
+
+    this.setStdoutCallback((data: string) => {
+      console.log(data);
+    });
+
+    this.setStderrCallback((data: string) => {
+      console.error(data);
+    });
   }
 
   private child: ChildProcessWithoutNullStreams;
@@ -17,6 +26,7 @@ export class Rfluff {
   private stderrCallback: (data: string) => void;
   private stdOut: string = '';
   private stdErr: string = '';
+  private cwd: string = process.cwd();
   //   private closeCallback: (code: number) => void;
   //   private errorCallback: (err: string) => void;
 
@@ -46,6 +56,14 @@ export class Rfluff {
     this.stderrCallback = callback;
   }
 
+  /**
+   * Set the working directory where the child process will be executed, by default is the current working directory
+   * @param cwd The working directory where the child process will be executed
+   */
+  setWorkingDirectory(cwd: string) {
+    this.cwd = cwd;
+  }
+
   //   setCloseCallback(callback: (code: number) => void) {
   //     this.closeCallback = callback;
   //   }
@@ -60,7 +78,9 @@ export class Rfluff {
     // statsCallback: (taskProgress: INmapTaskProgress) => void,
   ): Promise<IRfluffResult> {
     return new Promise<IRfluffResult>((resolve, reject) => {
-      this.child = spawn(bin, [...params]);
+      this.child = spawn(bin, [...params], {
+        cwd: this.cwd,
+      });
 
       // Listen for stdout writes
       // Execute the callback function each time the stdout of the child process is written
