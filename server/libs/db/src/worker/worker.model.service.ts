@@ -36,4 +36,8 @@ export class WorkerModelService {
       status: status,
     });
   }
+
+  async editAllWorkersStatus(status: EWorkerStatus) {
+    return this.workerDb.editAllWorkersStatus({ status });
+  }
 }

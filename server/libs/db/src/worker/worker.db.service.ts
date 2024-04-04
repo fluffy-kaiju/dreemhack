@@ -28,5 +28,7 @@ export class WorkerDbService {
   async editAllWorkersStatus(status: Prisma.WorkerUpdateInput) {
     //TODO UPDATE "Worker" SET "status" = 'OFFLINE'
     // https://www.prisma.io/docs/orm/prisma-client/queries/raw-database-access/raw-queries#executeraw
+    return this.dbService
+      .$executeRaw`UPDATE "Worker" SET "status" = ${status.status}::"EWorkerStatus"`;
   }
 }
