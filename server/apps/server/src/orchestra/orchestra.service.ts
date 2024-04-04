@@ -1,6 +1,6 @@
 import { WorkerModelService } from '@app/db/worker/worker.model.service';
 import { Injectable } from '@nestjs/common';
-import { EWorkerStatus, Prisma } from '@prisma/client';
+import { EWorkerStatus } from '@prisma/client';
 
 @Injectable()
 export class OrchestraService {
@@ -11,5 +11,9 @@ export class OrchestraService {
       id,
       status,
     );
+  }
+
+  async resetAllWorkersStatus() {
+    return this.workerModel.editAllWorkersStatus(EWorkerStatus.OFFLINE);
   }
 }

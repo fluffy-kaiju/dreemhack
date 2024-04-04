@@ -5,5 +5,6 @@ import { NmapController } from './nmap.controller';
 @Module({
   controllers: [NmapController],
   providers: [NmapService],
+  exports: [NmapService],
 })
 export class NmapModule {}

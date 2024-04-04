@@ -5,5 +5,6 @@ import { SubdomainController } from './subdomain.controller';
 @Module({
   controllers: [SubdomainController],
   providers: [SubdomainService],
+  exports: [SubdomainService],
 })
 export class SubdomainModule {}

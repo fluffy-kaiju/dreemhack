@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
 import { WorkerController } from './worker.controller';
 import { WorkerService } from './worker.service';
-import { WorkerGateway } from './worker.gateway';
 import { NmapModule } from './nmap/nmap.module';
 import { WorkerClientService } from './worker.client.service';
 import { ConfigModule } from '@nestjs/config';
@@ -11,6 +10,7 @@ import * as Joi from 'joi';
 @Module({
   imports: [
     NmapModule,
+    SubdomainModule,
     ConfigModule.forRoot({
       validationSchema: Joi.object({
         WORKER_PORT: Joi.number().default(3000),
@@ -21,6 +21,6 @@ import * as Joi from 'joi';
     SubdomainModule,
   ],
   controllers: [WorkerController],
-  providers: [WorkerService, WorkerGateway, WorkerClientService],
+  providers: [WorkerService, WorkerClientService],
 })
 export class WorkerModule {}
