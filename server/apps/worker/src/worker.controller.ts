@@ -1,22 +1,14 @@
-import { Body, Controller, Get, Logger, Post, Redirect } from '@nestjs/common';
-import { WorkerService } from './worker.service';
+import { Controller, Get, Logger, Redirect } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { RawNmapArgsDto } from './worker.dto';
 
 @ApiTags('Worker')
 @Controller()
 export class WorkerController {
-  constructor(private readonly workerService: WorkerService) {}
+  constructor() {}
 
   private readonly log = new Logger(WorkerController.name);
 
   @Get('/')
   @Redirect('/doc')
   async index() {}
-
-  @Post('/raw')
-  async rawArg(@Body() args: RawNmapArgsDto) {
-    // generate a id and store in db
-    return await this.workerService.runRawArgs(args.params);
-  }
 }

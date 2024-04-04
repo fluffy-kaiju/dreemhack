@@ -5,6 +5,7 @@ import { WorkerGateway } from './worker.gateway';
 import { NmapModule } from './nmap/nmap.module';
 import { WorkerClientService } from './worker.client.service';
 import { ConfigModule } from '@nestjs/config';
+import { SubdomainModule } from './subdomain/subdomain.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -17,6 +18,7 @@ import * as Joi from 'joi';
         WORKER_ID: Joi.string().required(),
       }),
     }),
+    SubdomainModule,
   ],
   controllers: [WorkerController],
   providers: [WorkerService, WorkerGateway, WorkerClientService],
