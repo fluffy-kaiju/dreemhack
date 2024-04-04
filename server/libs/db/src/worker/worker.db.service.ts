@@ -24,4 +24,9 @@ export class WorkerDbService {
       data,
     });
   }
+
+  async editAllWorkersStatus(status: Prisma.WorkerUpdateInput) {
+    //TODO UPDATE "Worker" SET "status" = 'OFFLINE'
+    // https://www.prisma.io/docs/orm/prisma-client/queries/raw-database-access/raw-queries#executeraw
+  }
 }

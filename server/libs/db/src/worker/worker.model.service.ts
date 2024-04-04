@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { WorkerDbService } from './worker.db.service';
-import { Prisma } from '@prisma/client';
+import { EWorkerStatus, Prisma } from '@prisma/client';
 
 @Injectable()
 export class WorkerModelService {
@@ -20,5 +20,20 @@ export class WorkerModelService {
 
   async update(id: string, data: Prisma.WorkerUpdateInput) {
     return this.workerDb.update(id, data);
+  }
+
+  async updateWorkerConnectionOrCreateIfNotExists(
+    id: string,
+    status: EWorkerStatus,
+  ) {
+    const worker = await this.findOne(id);
+    console.log(worker);
+    if (worker) {
+      return this.update(id, { status });
+    }
+    return this.create({
+      id: id,
+      status: status,
+    });
   }
 }

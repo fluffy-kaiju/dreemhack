@@ -22,6 +22,8 @@ export class WorkerClientService implements OnModuleInit, OnModuleDestroy {
     this.socket = io(this.config.get<string>('MASTER_WS'), {
       extraHeaders: {
         'worker-id': this.config.get<string>('WORKER_ID'),
+        //TODO: choose how we should name the worker
+        'worker-name': 'worker',
       },
     });
     this.socket.on('connect', () => {
