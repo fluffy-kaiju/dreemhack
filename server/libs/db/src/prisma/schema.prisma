@@ -5,134 +5,123 @@
 // Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
 
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("POSTGRES_URL")
+    provider = "postgresql"
+    url      = env("POSTGRES_URL")
 }
 
 model User {
-  id       String   @id @default(uuid())
-  name     String?
-  jobs     Job[]
+    id    String  @id @default(uuid())
+    name  String?
+    scope Scope[]
+    jobs  Job[]
 }
 
-
 enum EJobStatus {
-  PENDING
-  IN_PROGRESS
-  COMPLETED
-  FAILED
+    PENDING
+    IN_PROGRESS
+    COMPLETED
+    FAILED
 }
 
 enum EJobType {
-	NMAP_SCAN_PORTS
-	NMAP_SCAN_NETWORK
+    NMAP_SCAN_PORTS
+    NMAP_SCAN_NETWORK
 
-	SUBDOMAIN_SCAN
+    SUBDOMAIN_SCAN
 }
 
 //TODO rework all db and relations
 // https://youtu.be/4q-keGvUnag
-model scope {
-  id       String   @id @default(uuid())
-  name     String
-  description String
+model Scope {
+    id          String @id @default(uuid())
+    name        String
+    description String
 
-  jobs     Job[]
+    jobs   Job[]
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
 }
 
 model Job {
-  id          String   @id @default(uuid())
-  name        String
-  description String
-  status      EJobStatus
+    id          String     @id @default(uuid())
+    name        String
+    description String
+    status      EJobStatus
 
-  type        EJobType
-  // To avoid multiple relations type for each job type we store the raw result.
-  // The Master will have to parse the result, depending on the job type, and store it in the right table.
-  //   Like for a SUBDOMAIN_SCAN job:
-  //    - Store all subdomains names in a Subdomain table
-  //    - Store all subdomains IPs in a SubdomainIP table and link them to the Subdomain table
-  //    - Store all subdomains IPs open ports in a SubdomainIPOpenPort table and link them to the SubdomainIP table
-  rawResult   String?
+    type      EJobType
+    // To avoid multiple relations type for each job type we store the raw result.
+    // The Master will have to parse the result, depending on the job type, and store it in the right table.
+    //   Like for a SUBDOMAIN_SCAN job:
+    //    - Store all subdomains names in a Subdomain table
+    //    - Store all subdomains IPs in a SubdomainIP table and link them to the Subdomain table
+    //    - Store all subdomains IPs open ports in a SubdomainIPOpenPort table and link them to the SubdomainIP table
+    rawResult String?
 
-  user        User     @relation(fields: [userId], references: [id])
-  userId      String
+    user   User   @relation(fields: [userId], references: [id])
+    userId String
 
-  subdomains  Subdomain[]
-  ips  IP[]
-  ports  Port[]
-  domains  Domain[]
-
-  scope       scope @relation(fields: [scopeId], references: [id])
-  scopeId     String
+    subdomains Subdomain[]
+    ips        IP[]
+    domains    Domain[]
+    url        Url[]
+    scopes     Scope[]
+    worker     Worker      @relation(fields: [workerId], references: [id])
+    workerId   String
 }
 
 model Domain {
-  id       String   @id @default(uuid())
-  name     String
+    id     String @id @default(uuid())
+    domain String
 
-  subdomains  Subdomain[]
+    subdomains Subdomain[]
 
-  job       Job @relation(fields: [jobId], references: [id])
-  jobId     String @unique
+    jobs Job[]
 }
 
 model Subdomain {
-  id       String   @id @default(uuid())
-  name     String
+    id        String @id @default(uuid())
+    subdomain String
 
-  ip IP? @relation(fields: [ipId], references: [id])
-  ipId     String @unique
+    jobs     Job[]
+    domain   Domain @relation(fields: [domainId], references: [id])
+    domainId String
 
-  domain  Domain @relation(fields: [domainId], references: [id])
-  domainId     String
-
-  port  Port[]
-
-  job       Job @relation(fields: [jobId], references: [id])
-  jobId     String
+    ips IP[]
 }
 
 model IP {
-  id       String   @id @default(uuid())
-  ipv4       String?
-  ipv6       String?
+    id   String  @id @default(uuid())
+    ipv4 String?
+    ipv6 String?
 
-  subdomain  Subdomain[]
+    jobs Job[]
 
-  ports  Port[]
-
-  job       Job @relation(fields: [jobId], references: [id])
-  jobId     String
+    subdomains Subdomain[]
 }
 
-model Port {
-  id       String   @id @default(uuid())
-  port     Int
-
-  ip       IP @relation(fields: [ipId], references: [id])
-  ipId     String
-
-  subdomain  Subdomain @relation(fields: [subdomainId], references: [id])
-  subdomainId     String
-
-
-  job       Job @relation(fields: [jobId], references: [id])
-  jobId     String
+model Url {
+    id     String @id @default(uuid())
+    url    String
+    status String
+    reason String
+    port   Int
+    title  String
+    banner String
+    jobs   Job[]
 }
 
 enum EWorkerStatus {
-	ONLINE
-	OFFLINE
-	WORKING
+    ONLINE
+    OFFLINE
+    WORKING
 }
 
 model Worker {
-  id       String   @id @default(uuid())
-  status   EWorkerStatus
-
+    id     String        @id @default(uuid())
+    status EWorkerStatus
+    jobs   Job[]
 }
